@@ -17,6 +17,7 @@ import com.thoughtworks.xstream.XStream;
 
 import br.com.alura.loja.dao.CarrinhoDAO;
 import br.com.alura.loja.modelo.Carrinho;
+import br.com.alura.loja.modelo.Produto;
 
 @Path("carrinhos")
 public class CarrinhoResource {
@@ -47,12 +48,14 @@ public class CarrinhoResource {
 	}
 	
 	@PUT
-	@Path("{id}/produtos/{idProduto}")
-	public Response alterarQuantidadeProduto(String conteudo, @PathParam("id") long id, @PathParam("idProduto") long idProduto) {
+	@Path("{id}/produtos/{idProduto}/{quantidade}")
+	public Response alterarQuantidadeProduto( String conteudo, 
+											  @PathParam("id") long id, 
+											  @PathParam("idProduto") long idProduto,
+											  @PathParam("quantidade") long quantidade) {
 		Carrinho carrinho = new CarrinhoDAO().busca(id);
-//		Produto 
-//		carrinho.troca(produto);
-//		new CarrinhoDAO().
+		Produto produto = (Produto) new XStream().fromXML(conteudo); 
+		carrinho.trocaQuantidade(produto);
 		
 		return Response.ok().build();
 	}
